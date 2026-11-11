@@ -18,9 +18,9 @@ set_property target_language VHDL [current_project]
 set_property simulator_language VHDL [current_project]
 
 # Código-fonte, constraints e testbench
-add_files -norecurse [file join $root_dir src manchester_dif.vhd]
+add_files -norecurse [list [file join $root_dir src manchester_dif.vhd] [file join $root_dir src display_7seg.vhd]]
 add_files -fileset constrs_1 -norecurse [file join $root_dir constraints manchester_dif.xdc]
-add_files -fileset sim_1 -norecurse [file join $root_dir sim manchester_dif_tb.vhd]
+add_files -fileset sim_1 -norecurse [list [file join $root_dir sim manchester_dif_tb.vhd] [file join $root_dir sim display_7seg_tb.vhd]]
 
 # Módulos top da síntese e da simulação
 set_property top manchester_dif [get_filesets sources_1]

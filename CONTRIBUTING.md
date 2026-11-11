@@ -35,10 +35,14 @@ entity manchester is  -- manchester_dif no projeto diferencial
     data_in  : in  std_logic_vector(15 downto 0);  -- SW15..SW0
     data_out : out std_logic;                      -- sinal codificado (registrado)
     nrz_out  : out std_logic;                      -- bit atual / dado original
-    led      : out std_logic_vector(15 downto 0)   -- LD15..LD0
+    led      : out std_logic_vector(15 downto 0);  -- LD15..LD0
+    seg      : out std_logic_vector(6 downto 0);   -- display de 7 segmentos (g..a)
+    an       : out std_logic_vector(3 downto 0)    -- anodos do display (AN3..AN0)
   );
 end entity;
 ```
+
+As portas `seg` e `an` foram acrescentadas pela issue #6 (display de 7 segmentos). Tops que instanciam o núcleo, como os do PMOD e do VGA, podem deixá-las sem conexão, mas precisam incluir `display_7seg.vhd` entre os arquivos do projeto.
 
 Toda porta do top precisa ter pino no `.xdc`; caso contrário, o *Generate Bitstream* falha.
 
