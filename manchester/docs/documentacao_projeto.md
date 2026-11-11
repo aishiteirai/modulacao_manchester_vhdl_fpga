@@ -33,6 +33,7 @@ flowchart LR
     FF --> OUT1[data_out]
     FF --> OUT2[nrz_out]
     FF --> OUT3[led 15..0]
+    IDX --> DISP[Display de 7 segmentos<br/>número do bit] --> OUT4[seg / an]
 ```
 
 ## 3. Interface
@@ -45,6 +46,8 @@ flowchart LR
 | `data_out` | saída | `std_logic` | Sinal codificado em Manchester |
 | `nrz_out` | saída | `std_logic` | Bit em transmissão, no formato NRZ (dado original) |
 | `led` | saída | `std_logic_vector(15 downto 0)` | LEDs LD15..LD0; só o LED do bit em transmissão recebe o sinal codificado |
+| `seg` | saída | `std_logic_vector(6 downto 0)` | Segmentos g..a do display de 7 segmentos (ativos em 0) |
+| `an` | saída | `std_logic_vector(3 downto 0)` | Anodos AN3..AN0 do display (ativos em 0) |
 
 ## 4. Parâmetros (generics)
 
@@ -87,6 +90,10 @@ A tabela-verdade corresponde à porta **XNOR**: `saída = bit XNOR metade`.
 
 **Reset.** Enquanto o reset está ativo, o contador vai para 0, o índice para 15 e todas as saídas para nível baixo. Ao soltar o botão, a transmissão começa em SW15. Entre soltar o botão e o primeiro bit aparecer na saída há uma latência de 3 ciclos de clock (2 do sincronizador e 1 do flip-flop de saída), desprezível frente à duração do bit.
 
+**Display de 7 segmentos.** O submódulo `display_7seg` recebe o índice do bit e o mostra em decimal nos dois displays da direita (AN1 = dezena, AN0 = unidade), apagando a dezena para números menores que 10. Como os quatro displays compartilham os segmentos, eles são acesos alternadamente: o bit mais significativo de um contador de 17 bits escolhe entre unidade e dezena, de modo que cada display é atualizado a cerca de 380 Hz, sem cintilação perceptível. Durante o reset, o display fica apagado.
+
+**Variações para as saídas PMOD e VGA.** O mesmo módulo é instanciado, sem alterações, pelos tops das pastas `saidas/`: na saída PMOD, com `CYCLES_PER_BIT = 100_000` (1 ms por bit) e as saídas `data_out` e `nrz_out` ligadas aos pinos JA1 e JA2; na saída VGA, com 1 s por bit e `data_out` ligado ao controlador VGA, que pinta a tela de verde (nível alto) ou azul (nível baixo).
+
 ## 6. Mapeamento físico na placa
 
 | Sinal | Componente | Pino |
@@ -97,6 +104,8 @@ A tabela-verdade corresponde à porta **XNOR**: `saída = bit XNOR metade`.
 | `led(0..15)` | LD0..LD15 | U16, E19, U19, V19, W18, U15, U14, V14, V13, V3, W3, U3, P3, N3, P1, L1 |
 | `data_out` | PMOD JA1 | J1 |
 | `nrz_out` | PMOD JA2 | L2 |
+| `seg(0..6)` | Segmentos CA..CG | W7, W6, U8, V8, U5, V5, U7 |
+| `an(0..3)` | Anodos AN0..AN3 | U2, U4, V4, W4 |
 
 Os pinos seguem o arquivo `Basys-3-Master.xdc` da Digilent.
 
@@ -108,4 +117,4 @@ Os pinos seguem o arquivo `Basys-3-Master.xdc` da Digilent.
 | Simulador | Vivado Simulator |
 | Placa | Digilent Basys 3 (Artix-7 `xc7a35tcpg236-1`) |
 | Linguagem | VHDL-93 |
-| Bibliotecas | `ieee.std_logic_1164` |
+| Bibliotecas | `ieee.std_logic_1164` e `ieee.numeric_std` (no display) |
