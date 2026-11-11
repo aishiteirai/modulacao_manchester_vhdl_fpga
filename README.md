@@ -1,98 +1,64 @@
-# Codificação Manchester e Manchester Diferencial em VHDL/FPGA
+# Codificação Manchester em VHDL
 
-Trabalho prático da disciplina de **Comunicação de Dados - Sistemas Reconfiguráveis**.
+Trabalho da disciplina de **Comunicação de Dados – Sistemas Reconfiguráveis**, ministrada por **[professor(a): a confirmar]**.
+Semestre **[a confirmar]** · Grupo **[número a confirmar]**.
 
-O trabalho consiste em desenvolver, simular e implementar em FPGA (Basys 3), utilizando VHDL e o Vivado, dois codificadores de linha:
+## Integrantes
 
-- **Manchester (IEEE 802.3)**: bit representado pelo sentido da transição no meio do bit (0 = descida, 1 = subida)
-- **Manchester Diferencial**: sempre há transição no meio do bit; o bit é representado pela transição no início do intervalo (0 = inverte o nível, 1 = mantém o nível)
+- Bianca Ricci
+- Diogo Santos Rodrigues
+- Gustavo Marmo
+- Leonardo Rosário Teixeira
+- Ryan Corazza Alvarenga
 
-## Organização deste repositório
+## Descrição
 
-A branch `main` contém apenas o enunciado e os guias. Cada grupo tem uma **branch própria** (`grupo1`, `grupo2`, ...), criada pelo professor, que recebe a entrega do grupo. A estrutura evolui ao longo do semestre:
+Este trabalho implementa, em VHDL, dois codificadores de linha: **Manchester**, na convenção IEEE 802.3 (0 = descida, 1 = subida no meio do bit), e **Manchester Diferencial**, em que sempre há transição no meio do bit e o valor do bit é dado pela transição no início do intervalo (0 = inverte, 1 = mantém), com nível baixo após o reset.
 
-### Estado inicial (semestre começando)
+Os dois circuitos são simulados no Vivado Simulator e implementados na placa Basys 3. A sequência de 16 bits é definida pelos switches e transmitida de SW15 a SW0; o sinal codificado aparece no LED acima do switch em transmissão, em um pino do conector PMOD (para o osciloscópio) e na saída VGA, que muda a cor da tela conforme o nível do sinal.
 
-```
-modulacao_manchester_vhdl_fpga/
-└── main
-    ├── README.md
-    ├── enunciado.pdf
-    ├── guia_entrega.pdf
-    └── guia_documentacao.pdf
-```
-
-### Durante o semestre (grupos entregando)
+## Estrutura do repositório
 
 ```
-modulacao_manchester_vhdl_fpga/
-├── main                  Enunciado e guias (não muda)
-├── grupo1                Entrega do grupo 1
-├── grupo2                Entrega do grupo 2
-└── grupo3                Entrega do grupo 3
+.
+├── README.md                 Este arquivo
+├── CONTRIBUTING.md           Combinados de trabalho do grupo
+├── enunciado.pdf             Enunciado do trabalho
+├── guia_entrega.pdf          Guia de entrega via GitHub
+├── guia_documentacao.pdf     Guia de documentação
+├── manchester/               Projeto Manchester (auto-contido)
+│   ├── src/ sim/ constraints/ vivado_project/
+│   ├── docs/                 Tutoriais e documentação técnica
+│   └── saidas/               Saídas PMOD (osciloscópio) e VGA
+├── manchester_diferencial/   Projeto Manchester Diferencial (mesma estrutura)
+└── relatorio_final/          Relatório técnico consolidado e vídeo de demonstração
 ```
 
-### Fim do semestre (todas as entregas consolidadas)
+Cada projeto possui sua própria pasta `docs/`, com tutoriais e documentação técnica, e uma pasta `saidas/`, com as saídas PMOD e VGA.
 
-```
-modulacao_manchester_vhdl_fpga/
-├── main                  Enunciado e guias (sempre intocada)
-├── grupo1                Entrega do grupo 1
-├── grupo2                Entrega do grupo 2
-├── ...
-└── grupoN                Entrega do grupo N
-```
+## Projetos
 
-**Como navegar entre as entregas:** clicar no seletor de branches (canto superior esquerdo, onde aparece `main`) e escolher a branch do grupo desejado.
+- [Manchester](./manchester/): bit dado pelo sentido da transição no meio do bit
+- [Manchester Diferencial](./manchester_diferencial/): bit dado pela presença de transição no início do bit
 
-## Documentos do trabalho
+## Relatório
 
-- [📄 Enunciado completo](./enunciado.pdf): descrição do trabalho, requisitos e critério de avaliação
-- [📦 Guia de entrega](./guia_entrega.pdf): passo a passo da entrega via GitHub e estrutura de pastas
-- [📘 Guia de documentação](./guia_documentacao.pdf): orientação sobre READMEs, tutoriais, documentação técnica e relatório
+- [Relatório técnico final](./relatorio_final/relatorio.pdf)
+- [Vídeo de demonstração](./relatorio_final/video_demo.mp4)
 
-**Leia os três antes de começar.** O enunciado descreve *o que fazer*; o guia de entrega descreve *como entregar*; o guia de documentação descreve *o que escrever em cada documento*.
+## Ferramentas utilizadas
 
-## Como entregar (fluxo de fork)
+- AMD Vivado **[versão a definir]** e Vivado Simulator
+- Placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`)
+- Osciloscópio de dois canais (saída PMOD)
+- Monitor VGA (saída VGA)
 
-A entrega é feita via **fork + Pull Request**. Resumidamente:
+## Como começar
 
-1. **Fazer fork** deste repositório (botão `Fork` no canto superior direito)
-2. **Clonar o fork** na máquina de um dos integrantes
-3. **Desenvolver o trabalho** no fork seguindo a estrutura sugerida
-4. **Abrir um Pull Request** para a **branch do grupo** (`base: grupoX`, nunca `main`), com o título no formato:
-```
-   Entrega - Grupo X - Nome dos integrantes
-```
-5. **Aguardar a revisão**. Correções são feitas no fork e o PR atualiza sozinho. Após aprovado, o trabalho é incorporado à branch do grupo neste repositório
+Recomenda-se iniciar pelo projeto Manchester. Acesse a pasta [manchester/](./manchester/) e siga o README local.
 
-Os passos detalhados, com todos os comandos Git, estão no [guia de entrega](./guia_entrega.pdf).
+## Documentos do enunciado
 
-## Estrutura esperada dentro do fork de cada grupo
-
-```
-modulacao_manchester/
-├── README.md
-├── manchester/
-│   ├── src/, sim/, constraints/, vivado_project/
-│   ├── docs/      (tutoriais e documentação técnica)
-│   └── saidas/    (saídas PMOD e VGA)
-├── manchester_diferencial/   (mesma estrutura)
-└── relatorio_final/
-```
-
-Detalhes completos no [guia de entrega](./guia_entrega.pdf) e no [guia de documentação](./guia_documentacao.pdf).
-
-## Entregas dos grupos
-
-Entregas aprovadas e incorporadas no repositório:
-
-- (nenhuma entrega até o momento)
-
-## Observações
-
-- A implementação na placa é **obrigatória**
-- A convenção do Manchester adotada é a **IEEE 802.3**; no Manchester Diferencial, o nível após o reset é **baixo**
-- Cada projeto também deve ter as saídas **PMOD** (osciloscópio) e **VGA**
-- Critério de avaliação: **50%** para a implementação e **50%** para o repositório Git com todos os arquivos (detalhes no [enunciado](./enunciado.pdf))
-- Dúvidas: abrir uma **Issue** neste repositório
+- [Enunciado](./enunciado.pdf): descrição do trabalho, requisitos e critério de avaliação
+- [Guia de entrega](./guia_entrega.pdf): fluxo de entrega via GitHub e estrutura de pastas
+- [Guia de documentação](./guia_documentacao.pdf): conteúdo de READMEs, tutoriais, documentação e relatório
