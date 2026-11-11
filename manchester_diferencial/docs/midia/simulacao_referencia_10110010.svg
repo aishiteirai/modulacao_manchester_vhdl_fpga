@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1205" height="316" viewBox="0 0 1205 316" font-family="Inter, Arial, sans-serif">
+<rect width="1205" height="316" fill="#ffffff"/>
+<text x="185" y="22" font-size="15" font-weight="700" fill="#1f2430">Manchester Diferencial (nível inicial baixo) — simulação, sequência 10110010</text>
+<line x1="185.0" y1="58" x2="185.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="247.5" y1="58" x2="247.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="247.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">1</text>
+<line x1="310.0" y1="58" x2="310.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="372.5" y1="58" x2="372.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="372.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">0</text>
+<line x1="435.0" y1="58" x2="435.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="497.5" y1="58" x2="497.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="497.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">1</text>
+<line x1="560.0" y1="58" x2="560.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="622.5" y1="58" x2="622.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="622.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">1</text>
+<line x1="685.0" y1="58" x2="685.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="747.5" y1="58" x2="747.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="747.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">0</text>
+<line x1="810.0" y1="58" x2="810.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="872.5" y1="58" x2="872.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="872.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">0</text>
+<line x1="935.0" y1="58" x2="935.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="997.5" y1="58" x2="997.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="997.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">1</text>
+<line x1="1060.0" y1="58" x2="1060.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<line x1="1122.5" y1="58" x2="1122.5" y2="302" stroke="#d1d5db" stroke-dasharray="1,4"/>
+<text x="1122.5" y="52" font-size="14" font-weight="700" text-anchor="middle" fill="#1f2430">0</text>
+<line x1="1185.0" y1="58" x2="1185.0" y2="302" stroke="#9ca3af" stroke-dasharray="5,4"/>
+<text x="173" y="92.0" font-size="13" font-weight="600" text-anchor="end" fill="#1f2430">Índice do bit</text>
+<polygon points="188.0,72 294.5,72 297.5,87.0 294.5,102 188.0,102 185.0,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="241.2" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">15</text>
+<polygon points="300.5,72 419.5,72 422.5,87.0 419.5,102 300.5,102 297.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="360.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">14</text>
+<polygon points="425.5,72 544.5,72 547.5,87.0 544.5,102 425.5,102 422.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="485.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">13</text>
+<polygon points="550.5,72 669.5,72 672.5,87.0 669.5,102 550.5,102 547.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="610.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">12</text>
+<polygon points="675.5,72 794.5,72 797.5,87.0 794.5,102 675.5,102 672.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="735.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">11</text>
+<polygon points="800.5,72 919.5,72 922.5,87.0 919.5,102 800.5,102 797.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="860.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">10</text>
+<polygon points="925.5,72 1044.5,72 1047.5,87.0 1044.5,102 925.5,102 922.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="985.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">9</text>
+<polygon points="1050.5,72 1169.5,72 1172.5,87.0 1169.5,102 1050.5,102 1047.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1110.0" y="91.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">8</text>
+<polygon points="1175.5,72 1182.0,72 1185.0,87.0 1182.0,102 1175.5,102 1172.5,87.0" fill="#2563eb22" stroke="#2563eb" stroke-width="1.5"/>
+<text x="173" y="148.0" font-size="13" font-weight="600" text-anchor="end" fill="#1f2430">Bit atual (NRZ)</text>
+<path d="M185.0,128 L310.0,128 L310.0,158 L435.0,158 L435.0,128 L685.0,128 L685.0,158 L935.0,158 L935.0,128 L1060.0,128 L1060.0,158 L1185.0,158" fill="none" stroke="#db2777" stroke-width="2.5"/>
+<text x="173" y="204.0" font-size="13" font-weight="600" text-anchor="end" fill="#1f2430">Manchester Diferencial</text>
+<path d="M185.0,214 L247.5,214 L247.5,184 L310.0,184 L310.0,214 L372.5,214 L372.5,184 L497.5,184 L497.5,214 L622.5,214 L622.5,184 L685.0,184 L685.0,214 L747.5,214 L747.5,184 L810.0,184 L810.0,214 L872.5,214 L872.5,184 L997.5,184 L997.5,214 L1060.0,214 L1060.0,184 L1122.5,184 L1122.5,214 L1185.0,214" fill="none" stroke="#d97706" stroke-width="2.5"/>
+<text x="173" y="260.0" font-size="13" font-weight="600" text-anchor="end" fill="#1f2430">LEDs (hex)</text>
+<polygon points="188.0,240 244.5,240 247.5,255.0 244.5,270 188.0,270 185.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="216.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="250.5,240 307.0,240 310.0,255.0 307.0,270 250.5,270 247.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="278.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">8000</text>
+<polygon points="313.0,240 369.5,240 372.5,255.0 369.5,270 313.0,270 310.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="341.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="375.5,240 432.0,240 435.0,255.0 432.0,270 375.5,270 372.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="403.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">4000</text>
+<polygon points="438.0,240 494.5,240 497.5,255.0 494.5,270 438.0,270 435.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="466.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">2000</text>
+<polygon points="500.5,240 619.5,240 622.5,255.0 619.5,270 500.5,270 497.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="560.0" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="625.5,240 682.0,240 685.0,255.0 682.0,270 625.5,270 622.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="653.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">1000</text>
+<polygon points="688.0,240 744.5,240 747.5,255.0 744.5,270 688.0,270 685.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="716.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="750.5,240 807.0,240 810.0,255.0 807.0,270 750.5,270 747.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="778.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0800</text>
+<polygon points="813.0,240 869.5,240 872.5,255.0 869.5,270 813.0,270 810.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="841.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="875.5,240 932.0,240 935.0,255.0 932.0,270 875.5,270 872.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="903.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0400</text>
+<polygon points="938.0,240 994.5,240 997.5,255.0 994.5,270 938.0,270 935.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="966.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0200</text>
+<polygon points="1000.5,240 1057.0,240 1060.0,255.0 1057.0,270 1000.5,270 997.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="1028.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+<polygon points="1063.0,240 1119.5,240 1122.5,255.0 1119.5,270 1063.0,270 1060.0,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="1091.2" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0100</text>
+<polygon points="1125.5,240 1182.0,240 1185.0,255.0 1182.0,270 1125.5,270 1122.5,255.0" fill="#05966922" stroke="#059669" stroke-width="1.5"/>
+<text x="1153.8" y="259.0" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle" fill="#1f2430">0000</text>
+</svg>
