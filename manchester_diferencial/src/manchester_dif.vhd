@@ -9,7 +9,8 @@
 -- O nível da saída após o reset é baixo.
 --
 -- O sinal codificado sai em data_out e no LED acima do switch em transmissão;
--- os demais LEDs ficam apagados. Enquanto btn_rst está pressionado, a
+-- os demais LEDs ficam apagados. O display de 7 segmentos mostra o número do
+-- bit em transmissão (15 a 0). Enquanto btn_rst está pressionado, a
 -- transmissão fica parada e a saída em nível baixo; ao soltar, recomeça em SW15.
 --------------------------------------------------------------------------------
 library ieee;
@@ -25,7 +26,9 @@ entity manchester_dif is
     data_in  : in  std_logic_vector(15 downto 0);  -- sequência de bits (SW15..SW0)
     data_out : out std_logic;                      -- sinal codificado
     nrz_out  : out std_logic;                      -- bit em transmissão (dado original)
-    led      : out std_logic_vector(15 downto 0)   -- LD15..LD0
+    led      : out std_logic_vector(15 downto 0);  -- LD15..LD0
+    seg      : out std_logic_vector(6 downto 0);   -- segmentos do display (g..a)
+    an       : out std_logic_vector(3 downto 0)    -- anodos do display (AN3..AN0)
   );
 end entity;
 
@@ -104,6 +107,16 @@ begin
       end if;
     end if;
   end process;
+
+  -- Display de 7 segmentos com o número do bit em transmissão
+  display: entity work.display_7seg
+    port map (
+      clk    => clk,
+      rst    => rst,
+      numero => idx,
+      seg    => seg,
+      an     => an
+    );
 
   data_out <= nivel_reg;
   nrz_out  <= nrz_reg;
