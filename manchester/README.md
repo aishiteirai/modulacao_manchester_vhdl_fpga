@@ -18,10 +18,8 @@ manchester/
 ## Arquivos de código
 
 - `src/manchester.vhd`: código-fonte do codificador (contador de ciclos, índice do bit, registrador do bit atual, codificador XNOR e saídas registradas)
-- `src/display_7seg.vhd`: display de 7 segmentos com o número do bit em transmissão
 - `sim/manchester_tb.vhd`: testbench autoverificável, com `assert` em cada metade de cada bit
-- `sim/display_7seg_tb.vhd`: testbench do display de 7 segmentos
-- `constraints/manchester.xdc`: mapeamento do clock, do BTNC, dos switches, dos LEDs, do display e dos pinos JA1/JA2 do PMOD
+- `constraints/manchester.xdc`: mapeamento do clock, do BTNC, dos switches, dos LEDs e dos pinos JA1/JA2 do PMOD
 - `vivado_project/create_project.tcl`: script que recria o projeto Vivado
 
 ## Documentação
@@ -51,7 +49,6 @@ Para **reproduzir o projeto do zero**, seguir esta ordem:
 | SW15..SW0 | Sequência de bits (para cima = 1), transmitida de SW15 a SW0 |
 | LD15..LD0 | Sinal codificado no LED acima do switch em transmissão |
 | BTNC | Reset: enquanto pressionado, a saída fica apagada; ao soltar, recomeça em SW15 |
-| Display de 7 segmentos | Número do bit em transmissão (15 a 0) |
 | PMOD JA1 / JA2 | Sinal codificado / dado original |
 
 Cada bit dura 1 s. Com o switch em **1**, o LED ativo fica **apagado e depois aceso**; com o switch em **0**, fica **aceso e depois apagado**.
