@@ -174,10 +174,39 @@ Antes do uso do Vivado, os códigos foram compilados e simulados com o simulador
 
 ## 5. Resultados
 
+### 5.1 Simulação
+
+Os testbenches dos dois codificadores foram executados no GHDL e terminaram sem nenhum erro de `assert`, nos padrões VHDL-93 e VHDL-2008. O mesmo ocorreu com os testbenches do display de 7 segmentos, do controlador VGA e dos tops das saídas PMOD (simulados na taxa real de 1 ms por bit) e VGA (cerca de três quadros de vídeo). **[pendente: repetir no Vivado Simulator e incluir os prints, com os sinais identificados.]**
+
+As figuras a seguir mostram os oito primeiros bits da sequência de teste, `10110010`, que é o exemplo do enunciado. Em ambos os códigos, o índice do bit decrementa de 15 a 8, há transição no meio de todos os bits e apenas o LED da posição em transmissão recebe o sinal.
+
+![Simulação do Manchester](../manchester/docs/midia/simulacao_referencia_10110010.svg)
+
+*Figura 1: Simulação do codificador Manchester (IEEE 802.3) para a sequência 10110010.*
+
+![Simulação do Manchester Diferencial](../manchester_diferencial/docs/midia/simulacao_referencia_10110010.svg)
+
+*Figura 2: Simulação do codificador Manchester Diferencial, a partir do nível baixo, para a sequência 10110010.*
+
+As formas de onda esperadas no osciloscópio foram obtidas da simulação dos tops PMOD, com o dado original (NRZ) e o sinal codificado para a volta completa de 16 bits:
+
+![PMOD Manchester](../manchester/saidas/pmod_osciloscopio/docs/midia/forma_onda_esperada.svg)
+
+*Figura 3: Saída PMOD do Manchester simulada (1 ms por bit).*
+
+![PMOD Manchester Diferencial](../manchester_diferencial/saidas/pmod_osciloscopio/docs/midia/forma_onda_esperada.svg)
+
+*Figura 4: Saída PMOD do Manchester Diferencial simulada (1 ms por bit).*
+
+### 5.2 Síntese
+
+Antes do uso do Vivado, os seis tops (os dois projetos principais e as saídas PMOD e VGA de cada um) foram sintetizados com o sintetizador do GHDL, sem erros nem avisos. As *netlists* sintetizadas dos dois codificadores foram simuladas com os mesmos testbenches e também não apresentaram erros, o que indica que o comportamento descrito em VHDL é preservado na síntese. **[pendente: utilização de recursos (LUTs e flip-flops) e WNS do relatório de *timing* do Vivado.]**
+
+### 5.3 Placa, osciloscópio e VGA
+
 **[pendente]**
 
-- Prints das simulações, com identificação dos sinais (índice do bit, bit atual, sinal codificado e LEDs);
-- Fotos da placa em funcionamento;
+- Fotos da placa em funcionamento, com os testes do tutorial da placa;
 - Capturas do osciloscópio (saída PMOD), com os sinais e as transições do meio do bit identificados;
 - Fotos ou vídeo da tela VGA.
 
@@ -185,12 +214,52 @@ Antes do uso do Vivado, os códigos foram compilados e simulados com o simulador
 
 ## 6. Análise e discussão
 
-**[pendente]**
+### 6.1 Medidas a partir da simulação
 
-- Comparação entre Manchester e Manchester Diferencial (vantagens, desvantagens, características do sinal, comportamento com inversão de polaridade);
-- Comparação dos códigos Manchester com os códigos NRZ (número de transições por bit, sincronismo, largura de banda);
-- Comparação entre o resultado da simulação e o obtido na placa;
-- Interpretação dos resultados observados.
+Para comparar os códigos de forma objetiva, as formas de onda simuladas dos tops PMOD (Figuras 3 e 4) foram analisadas ao longo de uma volta completa da sequência `1011001011110000` (16 bits de 1 ms):
+
+| Medida | NRZ (dado original) | Manchester | Manchester Diferencial |
+|---|:---:|:---:|:---:|
+| Transições em 16 bits | 7 | 24 | 24 |
+| Transições por bit | 0,44 | 1,50 | 1,50 |
+| Maior intervalo sem transição | 4 ms (4 bits) | 1 ms (1 bit) | 1 ms (1 bit) |
+| Tempo em nível alto | 50 % | 50 % | 50 % |
+
+Nos dois códigos Manchester, as 24 transições correspondem às 16 transições do meio do bit, sempre presentes, mais 8 transições de fronteira entre bits. Já o NRZ ficou até 4 ms sem nenhuma transição (nos trechos `1111` e `0000`), intervalo em que um receptor não teria referência para corrigir o seu relógio. Nos códigos Manchester, o maior intervalo sem transição foi de um bit, independentemente da sequência, o que evidencia a autossincronização.
+
+O tempo em nível alto foi de 50 % nos três sinais, mas por razões diferentes: no NRZ, isso ocorreu apenas porque a sequência escolhida tem oito bits 1 e oito bits 0; com todos os switches em 1, o NRZ ficaria 100 % do tempo em nível alto, ou seja, com componente DC máxima. Nos códigos Manchester, cada bit tem uma metade em nível alto e outra em nível baixo, de modo que o valor médio é o mesmo em qualquer sequência.
+
+### 6.2 Largura de banda
+
+Com 1 kbit/s, o sinal NRZ de maior frequência é a sequência alternada `1010...`, uma onda quadrada de 500 Hz. Nos códigos Manchester, sequências de bits iguais (todos 1 ou todos 0 no Manchester; todos 0 no Diferencial) produzem uma onda quadrada de 1 kHz, com pulsos de 0,5 ms. A frequência fundamental máxima dobrou em relação ao NRZ, confirmando que os códigos Manchester exigem aproximadamente o dobro da largura de banda para a mesma taxa de bits.
+
+### 6.3 Inversão de polaridade
+
+Para avaliar o efeito de uma inversão de polaridade (fios do par trocados), as formas de onda simuladas foram invertidas e decodificadas:
+
+| Código | Bits decodificados do sinal original | Bits decodificados do sinal invertido |
+|---|---|---|
+| Manchester | `1011001011110000` | `0100110100001111` (todos os bits invertidos) |
+| Manchester Diferencial | `1011001011110000` | `1011001011110000` (sem alteração) |
+
+No Manchester, a inversão troca o sentido de todas as transições do meio do bit e, portanto, inverte todos os bits. No Manchester Diferencial, a informação está na presença ou ausência de transição no início do bit, que a inversão preserva; os dados são recuperados corretamente, desde que o receptor tome como referência o nível realmente recebido (no sinal invertido, o nível de partida passa a ser alto).
+
+### 6.4 Comparação entre Manchester e Manchester Diferencial
+
+| Aspecto | Manchester | Manchester Diferencial |
+|---|---|---|
+| Onde está a informação | sentido da transição no meio do bit | presença de transição no início do bit |
+| Memória no codificador | não (porta XNOR) | sim (registrador do último nível) |
+| Dependência do nível inicial | não | sim (nível baixo após o reset) |
+| Inversão de polaridade | inverte os dados | não afeta os dados |
+| Leitura a olho nu nos LEDs | direta (apagado→aceso = 1) | exige comparar com o LED anterior |
+| Autossincronização, componente DC e largura de banda | iguais nos dois códigos | iguais nos dois códigos |
+
+O Manchester foi mais simples de implementar e de interpretar na placa, pois cada bit pode ser lido isoladamente. O Manchester Diferencial exigiu um elemento de memória e uma condição inicial definida, mas oferece imunidade à inversão de polaridade.
+
+### 6.5 Simulação e placa
+
+**[pendente]** Comparar o comportamento observado na placa, no osciloscópio e no monitor com as Figuras 1 a 4 (ordem dos LEDs, metades do bit, reset, troca de switches) e comentar eventuais diferenças, como a latência de 3 ciclos de clock após o reset, imperceptível na placa.
 
 ---
 
