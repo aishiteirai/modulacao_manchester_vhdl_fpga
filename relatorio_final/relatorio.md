@@ -10,10 +10,12 @@
 
 Comunicação de Dados – Sistemas Reconfiguráveis
 
-Professor(a): **[pendente]**
-Instituição: **[pendente]**
-Semestre: **[pendente]**
-Grupo: **[pendente]**
+| | |
+|---|---|
+| Professor(a) | **[pendente]** |
+| Instituição | **[pendente]** |
+| Semestre | **[pendente]** |
+| Grupo | **[pendente]** |
 
 Integrantes:
 
