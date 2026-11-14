@@ -94,6 +94,16 @@ Como o switch só é lido no início do bit, alterá-lo no meio do intervalo nã
 
 Os pinos seguem o arquivo `Basys-3-Master.xdc` da Digilent.
 
+Os tops das saídas usam, além desses, os seguintes pinos (arquivos em `saidas/*/constraints/`):
+
+| Saída | Sinal | Pinos |
+|---|---|---|
+| PMOD | `ja(0)` (sinal codificado) / `ja(1)` (NRZ) | J1 / L2 (JA1 / JA2) |
+| VGA | `vgaRed(0..3)` | G19, H19, J19, N19 |
+| VGA | `vgaGreen(0..3)` | J17, H17, G17, D17 |
+| VGA | `vgaBlue(0..3)` | N18, L18, K18, J18 |
+| VGA | `Hsync` / `Vsync` | P19 / R19 |
+
 ## 7. Dependências e ambiente
 
 | Item | Valor |
