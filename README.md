@@ -23,6 +23,7 @@ Os dois circuitos são simulados no Vivado Simulator e implementados na placa Ba
 .
 ├── README.md                 Este arquivo
 ├── CONTRIBUTING.md           Combinados de trabalho do grupo
+├── ferramentas/              Script que gera os PDFs a partir dos documentos em Markdown
 ├── enunciado.pdf             Enunciado do trabalho
 ├── guia_entrega.pdf          Guia de entrega via GitHub
 ├── guia_documentacao.pdf     Guia de documentação
@@ -48,7 +49,8 @@ Cada projeto possui sua própria pasta `docs/`, com tutoriais e documentação t
 
 ## Ferramentas utilizadas
 
-- AMD Vivado **[versão a definir]** e Vivado Simulator
+- AMD Vivado 2025.2 e Vivado Simulator
+- GHDL 4.1 (pré-validação das simulações e da síntese)
 - Placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`)
 - Osciloscópio de dois canais (saída PMOD)
 - Monitor VGA (saída VGA)

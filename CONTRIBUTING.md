@@ -16,10 +16,10 @@ Regras de trabalho para o desenvolvimento do projeto de codificação Manchester
 
 | Item | Definição |
 |---|---|
-| Vivado | **versão a definir** (todos devem usar a mesma) |
+| Vivado | **2025.2** (todos devem usar a mesma versão) |
 | Placa | Basys 3 (Artix-7, `xc7a35tcpg236-1`) |
 | Constraints | partir do `Basys-3-Master.xdc` da Digilent |
-| PDFs (tutoriais, documentação e relatório) | **ferramenta a definir** (ex.: Overleaf ou Google Docs), com modelo comum |
+| PDFs (tutoriais, documentação e relatório) | escritos em Markdown (`.md`) e convertidos com `ferramentas/gerar_pdfs.py`, que aplica o mesmo modelo a todos |
 | Data do laboratório | **a definir** |
 
 ## Interface do núcleo
@@ -85,3 +85,15 @@ Co-authored-by: Nome <email-cadastrado@no-github.com>
 - Prints, fotos, vídeos e capturas vão para a pasta `docs/midia/` do projeto ou da saída correspondente **desde o início**.
 - Não versionar arquivos gerados pelo Vivado (`.runs`, `.cache`, `.sim` etc.); o `.gitignore` já cuida disso. Versionar os `.vhd`, `.xdc`, `.xpr` e `.wcfg`.
 - Os arquivos `.gitkeep` só existem para manter as pastas vazias no Git e podem ser apagados quando a pasta receber arquivos.
+
+## Documentos em PDF
+
+Cada tutorial, documentação técnica e o relatório são editados no arquivo `.md` correspondente; o `.pdf` é gerado a partir dele e não deve ser editado diretamente. Depois de alterar um `.md` (por exemplo, ao adicionar fotos do laboratório), gerar o PDF de novo e commitar os dois arquivos:
+
+```bash
+pip install markdown playwright
+playwright install chromium
+python ferramentas/gerar_pdfs.py
+```
+
+O script aceita arquivos específicos (`python ferramentas/gerar_pdfs.py relatorio_final/relatorio.md`). Os marcadores de imagem pendente, como `**[foto: ...]**`, aparecem no PDF como caixas destacadas; ao incluir a imagem, substituir o marcador por `![descrição](midia/arquivo.png)`.
