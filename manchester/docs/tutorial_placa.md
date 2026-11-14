@@ -8,7 +8,7 @@ Este tutorial mostra como sintetizar o codificador Manchester, gerar o bitstream
 
 | Item | Observação |
 |---|---|
-| AMD Vivado | versão **a definir pelo grupo**, com suporte à família Artix-7 e os drivers de cabo instalados (opção *Install Cable Drivers* no instalador) |
+| AMD Vivado | versão 2025.2, com suporte à família Artix-7 e os drivers de cabo instalados (opção *Install Cable Drivers* no instalador) |
 | Placa Digilent Basys 3 | jumper **JP1** na posição **JTAG** |
 | Cabo micro-USB | ligado ao conector **PROG/UART** da placa |
 | Projeto Vivado | aberto conforme o [tutorial de simulação](./tutorial_simulacao.md) (`vivado_project/manchester.xpr` ou `create_project.tcl`) |
@@ -31,7 +31,15 @@ O código foi feito para não gerar *latches*; ao final da síntese, a aba **Mes
 2. Aguardar a mensagem *Implementation successfully completed*;
 3. Abrir **Open Implemented Design › Report Timing Summary** e conferir que o **WNS** (*Worst Negative Slack*) é positivo: o circuito atende ao clock de 100 MHz.
 
-**[print: Timing Summary com WNS positivo]**
+O WNS e a utilização também aparecem na aba **Design Runs**, na parte de baixo da janela (colunas **WNS**, **LUT** e **FF**). No projeto do grupo, a implementação resultou em WNS de **2,520 ns**, com **39 LUTs** e **77 flip-flops**, menos de 1 % dos recursos da FPGA.
+
+![Aba Design Runs](midia/WNS.png)
+
+*Figura: aba Design Runs após a geração do bitstream, com o status `write_bitstream Complete!` e o WNS de 2,520 ns.*
+
+![Utilização](midia/LUT_FF.png)
+
+*Figura: utilização de recursos na aba Design Runs (39 LUTs e 77 flip-flops após a implementação).*
 
 ## 4. Geração do bitstream
 
@@ -40,7 +48,7 @@ O código foi feito para não gerar *latches*; ao final da síntese, a aba **Mes
 
 Se aparecer o erro de porta sem pino (*NSTD-1* ou *UCIO-1*), alguma porta do módulo não está no arquivo `constraints/manchester.xdc`. Todas as portas (`clk`, `btn_rst`, `data_in`, `data_out`, `nrz_out`, `led`, `seg` e `an`) já estão mapeadas nesse arquivo.
 
-**[print: mensagem de bitstream gerado]**
+Ao final, a linha **impl_1** da aba **Design Runs** mostra o status `write_bitstream Complete!` (figura da seção anterior).
 
 ## 5. Conexão da placa
 
