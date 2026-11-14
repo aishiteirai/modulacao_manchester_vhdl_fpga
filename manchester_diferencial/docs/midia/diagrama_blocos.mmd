@@ -1,4 +1,4 @@
-flowchart LR
+flowchart TB
     BTN[btn_rst<br/>BTNC] --> SYNC[Sincronizador<br/>2 flip-flops]
     SYNC -->|rst| CNT
     CLK[clk<br/>100 MHz] --> CNT[Contador de ciclos<br/>0 .. CYCLES_PER_BIT-1]
