@@ -19,6 +19,7 @@ import argparse
 import pathlib
 import re
 import sys
+import tempfile
 
 import markdown
 from playwright.sync_api import sync_playwright
@@ -57,7 +58,8 @@ code { font-family: "JetBrains Mono", Consolas, monospace; font-size: 8.8pt;
 pre { background: #1f2430; color: #e5e7eb; padding: 3mm; border-radius: 2mm;
       font-size: 8.4pt; white-space: pre-wrap; page-break-inside: avoid; }
 pre code { background: none; color: inherit; padding: 0; }
-img { max-width: 100%; display: block; margin: 3mm auto; page-break-inside: avoid; }
+img { max-width: 100%; max-height: 150mm; width: auto; display: block; margin: 3mm auto;
+      page-break-inside: avoid; }
 p > em:only-child { display: block; text-align: center; color: #6b7280;
                     font-size: 9pt; margin-top: -1.5mm; }
 blockquote { margin: 3mm 0; padding: 2mm 4mm; border-left: 3px solid #2563eb;
@@ -94,7 +96,14 @@ def converter(pagina, md_path):
     html = (f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
             f'<base href="{md_path.parent.as_uri()}/"><title>{titulo}</title>'
             f"<style>{CSS}</style></head><body>{corpo}</body></html>")
-    pagina.set_content(html, wait_until="load")
+    # A página precisa ser aberta a partir de um arquivo (file://) para que o
+    # navegador possa carregar as imagens locais referenciadas no documento.
+    with tempfile.NamedTemporaryFile("w", suffix=".html", encoding="utf-8", delete=False) as tmp:
+        tmp.write(html)
+    try:
+        pagina.goto(pathlib.Path(tmp.name).as_uri(), wait_until="load")
+    finally:
+        pathlib.Path(tmp.name).unlink()
     pdf = md_path.with_suffix(".pdf")
     pagina.pdf(path=str(pdf), format="A4", print_background=True, prefer_css_page_size=True,
                display_header_footer=True, header_template="<span></span>",
