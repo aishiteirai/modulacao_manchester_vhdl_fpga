@@ -20,7 +20,7 @@ Regras de trabalho para o desenvolvimento do projeto de codificação Manchester
 | Placa | Basys 3 (Artix-7, `xc7a35tcpg236-1`) |
 | Constraints | partir do `Basys-3-Master.xdc` da Digilent |
 | PDFs (tutoriais, documentação e relatório) | escritos em Markdown (`.md`) e convertidos com `ferramentas/gerar_pdfs.py`, que aplica o mesmo modelo a todos |
-| Data do laboratório | **a definir** |
+| Data do laboratório | 13/11/2026 |
 
 ## Interface do núcleo
 
