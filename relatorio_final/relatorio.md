@@ -27,7 +27,7 @@ Integrantes:
 
 ## Resumo
 
-**[pendente]** Escrever ao final (5 a 10 linhas): o que foi implementado (codificadores Manchester IEEE 802.3 e Manchester Diferencial em VHDL, simulados no Vivado Simulator e implementados na Basys 3, com saídas em LEDs, PMOD e VGA) e os principais resultados obtidos.
+Este trabalho apresentou a implementação, em VHDL, de dois codificadores de linha: Manchester, na convenção IEEE 802.3, e Manchester Diferencial, com nível baixo após o reset. Os circuitos transmitem ciclicamente uma sequência de 16 bits definida pelos switches da placa Basys 3 e apresentam o sinal codificado nos LEDs, em um display de 7 segmentos (número do bit), no conector PMOD, para observação em osciloscópio, e na saída VGA, que muda a cor da tela conforme o nível do sinal. Os testbenches autoverificáveis não apontaram erros no GHDL nem no Vivado Simulator, e a implementação no Vivado 2025.2 atendeu ao clock de 100 MHz com folga (WNS de 2,520 ns e 3,075 ns), usando menos de 1 % dos recursos da FPGA. Medidas feitas sobre as formas de onda simuladas confirmaram a autossincronização, a ausência de componente DC e o dobro de largura de banda dos códigos Manchester em relação ao NRZ, bem como a imunidade do Manchester Diferencial à inversão de polaridade. **[pendente: acrescentar uma frase sobre os resultados na placa, no osciloscópio e no VGA.]**
 
 ---
 
@@ -119,7 +119,7 @@ O trabalho foi organizado nas seguintes etapas:
 
 O desenvolvimento foi dividido entre os integrantes e acompanhado por *issues* no repositório Git do grupo.
 
-**Ferramentas utilizadas:** AMD Vivado (versão **[pendente]**), Vivado Simulator, GHDL, placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`), osciloscópio **[pendente: modelo]**, monitor VGA e Git/GitHub.
+**Ferramentas utilizadas:** AMD Vivado 2025.2, Vivado Simulator, GHDL, placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`), osciloscópio **[pendente: modelo]**, monitor VGA e Git/GitHub.
 
 ---
 
@@ -168,7 +168,10 @@ Antes do uso do Vivado, os códigos foram compilados e simulados com o simulador
 - **Identificadores que diferem apenas em maiúsculas:** em uma primeira versão, a constante `HALF` e a variável `half` coexistiam no mesmo código. Como o VHDL não diferencia maiúsculas de minúsculas, os dois nomes se referiam ao mesmo identificador e o código não compilava. Os nomes foram trocados por `HALF_BIT` e `metade`;
 - **Condição de corrida no testbench:** a troca dos switches no testbench ocorria no mesmo instante da borda de clock em que o circuito lia o switch, gerando falsos erros. Os pontos de verificação foram deslocados meio ciclo antes das bordas de leitura;
 - **Portas sem pino:** como o Vivado não gera o bitstream quando uma porta do top não tem pino definido, as saídas `data_out` e `nrz_out` foram mapeadas no PMOD também nos projetos principais;
-- **[pendente]** dificuldades encontradas no Vivado e na placa.
+- **Caminhos no Tcl Console do Vivado:** na primeira execução dos scripts de criação dos projetos, o caminho da pasta foi digitado com barras invertidas (`C:\...`). No Tcl, a barra invertida é um caractere de escape, e o comando `cd` falhou. O problema foi resolvido usando barras normais (`C:/...`), o que passou a constar nos tutoriais;
+- **Sinais adicionados após a simulação:** sinais internos arrastados para a janela de forma de onda depois da execução apareceram vazios, pois o Vivado Simulator só registra os sinais presentes na janela durante a simulação. Foi necessário reiniciar e executar de novo a simulação (`restart` e `run 4us`);
+- **Perda de alterações em um *merge*:** ao resolver um conflito na integração das *branches*, os arquivos do projeto Manchester voltaram à versão anterior ao display de 7 segmentos, o que impedia a compilação do top VGA. O problema foi detectado pela regressão automática dos testbenches e da síntese e corrigido restaurando os arquivos;
+- **[pendente]** dificuldades encontradas na placa.
 
 ---
 
@@ -176,7 +179,7 @@ Antes do uso do Vivado, os códigos foram compilados e simulados com o simulador
 
 ### 5.1 Simulação
 
-Os testbenches dos dois codificadores foram executados no GHDL e terminaram sem nenhum erro de `assert`, nos padrões VHDL-93 e VHDL-2008. O mesmo ocorreu com os testbenches do display de 7 segmentos, do controlador VGA e dos tops das saídas PMOD (simulados na taxa real de 1 ms por bit) e VGA (cerca de três quadros de vídeo). **[pendente: repetir no Vivado Simulator e incluir os prints, com os sinais identificados.]**
+Os testbenches dos dois codificadores foram executados no GHDL e terminaram sem nenhum erro de `assert`, nos padrões VHDL-93 e VHDL-2008. O mesmo ocorreu com os testbenches do display de 7 segmentos, do controlador VGA e dos tops das saídas PMOD (simulados na taxa real de 1 ms por bit) e VGA (cerca de três quadros de vídeo). As simulações dos dois codificadores foram repetidas no Vivado Simulator 2025.2, com o mesmo resultado: o testbench terminou aos 3870 ns com a mensagem `Simulacao concluida sem erros` nos dois projetos.
 
 As figuras a seguir mostram os oito primeiros bits da sequência de teste, `10110010`, que é o exemplo do enunciado. Em ambos os códigos, o índice do bit decrementa de 15 a 8, há transição no meio de todos os bits e apenas o LED da posição em transmissão recebe o sinal.
 
@@ -198,9 +201,28 @@ As formas de onda esperadas no osciloscópio foram obtidas da simulação dos to
 
 *Figura 4: Saída PMOD do Manchester Diferencial simulada (1 ms por bit).*
 
+As Figuras 5 e 6 mostram a simulação no Vivado Simulator, com zoom nos dois primeiros bits após o reset (bit 15 = 1 e bit 14 = 0). No Manchester, o bit 1 aparece como baixo → alto e o bit 0 como alto → baixo, e a saída permanece alta na fronteira entre eles. No Manchester Diferencial, os dois bits aparecem como baixo → alto, e a diferença entre eles está na fronteira: a saída cai no início do bit 0 (inversão) e não muda no início do bit 1.
+
+![Simulação do Manchester no Vivado](../manchester/docs/midia/viv_sim_zoom.png)
+
+*Figura 5: Simulação do Manchester no Vivado Simulator (índice, bit atual, sinal codificado e LEDs).*
+
+![Simulação do Manchester Diferencial no Vivado](../manchester_diferencial/docs/midia/viv_sim_dif_zoom.png)
+
+*Figura 6: Simulação do Manchester Diferencial no Vivado Simulator.*
+
 ### 5.2 Síntese
 
-Antes do uso do Vivado, os seis tops (os dois projetos principais e as saídas PMOD e VGA de cada um) foram sintetizados com o sintetizador do GHDL, sem erros nem avisos. As *netlists* sintetizadas dos dois codificadores foram simuladas com os mesmos testbenches e também não apresentaram erros, o que indica que o comportamento descrito em VHDL é preservado na síntese. **[pendente: utilização de recursos (LUTs e flip-flops) e WNS do relatório de *timing* do Vivado.]**
+Antes do uso do Vivado, os seis tops (os dois projetos principais e as saídas PMOD e VGA de cada um) foram sintetizados com o sintetizador do GHDL, sem erros nem avisos. As *netlists* sintetizadas dos dois codificadores foram simuladas com os mesmos testbenches e também não apresentaram erros, o que indica que o comportamento descrito em VHDL é preservado na síntese.
+
+No Vivado 2025.2, os seis projetos foram sintetizados e implementados e tiveram o *bitstream* gerado com sucesso. Os resultados dos projetos principais, para a FPGA Artix-7 `xc7a35tcpg236-1`, estão na tabela a seguir:
+
+| Projeto | WNS (clock de 100 MHz) | LUTs | Flip-flops |
+|---|:---:|:---:|:---:|
+| Manchester | 2,520 ns | 39 | 77 |
+| Manchester Diferencial | 3,075 ns | 44 | 77 |
+
+O WNS (*Worst Negative Slack*) positivo indica que todos os caminhos do circuito atendem ao período de 10 ns do clock, com folga. Os dois circuitos ocupam menos de 1 % dos recursos da FPGA (20 800 LUTs e 41 600 flip-flops). O Manchester Diferencial usa 5 LUTs a mais, correspondentes à lógica da regra de transição, e o número de flip-flops é o mesmo nos dois projetos. A maior parte dos flip-flops corresponde ao contador de ciclos de 27 bits, aos 16 LEDs registrados e ao contador de multiplexação de 17 bits do display. **[pendente: analisar os avisos da aba *Methodology* do Vivado (46 avisos no projeto diferencial).]**
 
 ### 5.3 Placa, osciloscópio e VGA
 
@@ -265,7 +287,13 @@ O Manchester foi mais simples de implementar e de interpretar na placa, pois cad
 
 ## 7. Conclusões
 
-**[pendente]** Principais aprendizados, limitações observadas, possíveis melhorias ou trabalhos futuros.
+Os dois codificadores foram implementados em VHDL com uma estrutura comum, o que permitiu reaproveitar os mesmos blocos de contagem, seleção de bit, display e saídas, e desenvolver as saídas PMOD e VGA em paralelo. A codificação Manchester na convenção IEEE 802.3 se reduziu a uma porta XNOR entre o bit atual e a metade do bit, enquanto o Manchester Diferencial exigiu um elemento de memória e uma condição inicial definida. Os resultados de simulação e as medidas feitas sobre as formas de onda confirmaram as propriedades teóricas estudadas: pelo menos uma transição por bit, ausência de componente DC, cerca do dobro da largura de banda do NRZ e, no caso do Diferencial, imunidade à inversão de polaridade.
+
+Do ponto de vista metodológico, o uso de testbenches autoverificáveis, da pré-validação no GHDL e de scripts para criar os projetos Vivado permitiu detectar erros antes do uso da placa, incluindo uma regressão introduzida durante a integração do código, e tornou os projetos reproduzíveis por qualquer integrante.
+
+Como limitações, a duração do bit é fixada em tempo de síntese, sendo necessário gerar um *bitstream* diferente para os LEDs (1 s por bit) e para o osciloscópio (1 ms por bit), e o trabalho não inclui um decodificador. Como trabalhos futuros, sugerem-se a seleção da taxa de bits por switches ou botões, a implementação dos decodificadores com recuperação de relógio a partir das transições do sinal e a transmissão entre duas placas pelo conector PMOD.
+
+**[pendente]** Acrescentar as conclusões sobre o funcionamento na placa, no osciloscópio e no VGA.
 
 ---
 
