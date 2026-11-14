@@ -17,24 +17,9 @@ O circuito recebe uma sequência de 16 bits pelos switches da placa Basys 3 e a 
 
 ## 2. Diagrama de blocos
 
-```mermaid
-flowchart LR
-    BTN[btn_rst<br/>BTNC] --> SYNC[Sincronizador<br/>2 flip-flops]
-    SYNC -->|rst| CNT
-    CLK[clk<br/>100 MHz] --> CNT[Contador de ciclos<br/>0 .. CYCLES_PER_BIT-1]
-    CNT -->|fim do bit| IDX[Índice do bit<br/>15 → 0, cíclico]
-    CNT -->|"metade = cnt ≥ CYCLES_PER_BIT/2"| ENC
-    SW[data_in<br/>SW15..SW0] --> MUX[Seleção<br/>data_in índice]
-    IDX --> MUX
-    MUX -->|início do bit| BREG[Registrador<br/>do bit atual]
-    BREG --> ENC[Codificador<br/>bit XNOR metade]
-    ENC --> FF[Flip-flops<br/>de saída]
-    IDX --> FF
-    FF --> OUT1[data_out]
-    FF --> OUT2[nrz_out]
-    FF --> OUT3[led 15..0]
-    IDX --> DISP[Display de 7 segmentos<br/>número do bit] --> OUT4[seg / an]
-```
+![Diagrama de blocos](midia/diagrama_blocos.svg)
+
+*Figura: diagrama de blocos do circuito. A fonte editável do diagrama está em `docs/midia/diagrama_blocos.mmd` (formato Mermaid).*
 
 ## 3. Interface
 
@@ -113,7 +98,7 @@ Os pinos seguem o arquivo `Basys-3-Master.xdc` da Digilent.
 
 | Item | Valor |
 |---|---|
-| Ferramenta | AMD Vivado (versão: **a definir pelo grupo**) |
+| Ferramenta | AMD Vivado 2025.2 |
 | Simulador | Vivado Simulator |
 | Placa | Digilent Basys 3 (Artix-7 `xc7a35tcpg236-1`) |
 | Linguagem | VHDL-93 |

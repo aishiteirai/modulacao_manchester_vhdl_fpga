@@ -1,0 +1,16 @@
+flowchart LR
+    BTN[btn_rst<br/>BTNC] --> SYNC[Sincronizador<br/>2 flip-flops]
+    SYNC -->|rst| CNT
+    CLK[clk<br/>100 MHz] --> CNT[Contador de ciclos<br/>0 .. CYCLES_PER_BIT-1]
+    CNT -->|fim do bit| IDX[Índice do bit<br/>15 → 0, cíclico]
+    CNT -->|"metade = cnt ≥ CYCLES_PER_BIT/2"| ENC
+    SW[data_in<br/>SW15..SW0] --> MUX[Seleção<br/>data_in índice]
+    IDX --> MUX
+    MUX -->|início do bit| BREG[Registrador<br/>do bit atual]
+    BREG --> ENC[Codificador<br/>bit XNOR metade]
+    ENC --> FF[Flip-flops<br/>de saída]
+    IDX --> FF
+    FF --> OUT1[data_out]
+    FF --> OUT2[nrz_out]
+    FF --> OUT3[led 15..0]
+    IDX --> DISP[Display de 7 segmentos<br/>número do bit] --> OUT4[seg / an]
