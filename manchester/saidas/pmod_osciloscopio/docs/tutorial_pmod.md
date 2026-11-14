@@ -6,7 +6,7 @@ Este tutorial mostra como gravar a saída PMOD do codificador Manchester na Basy
 
 ## 1. Pré-requisitos
 
-- Vivado instalado (mesma versão usada no projeto principal)
+- Vivado 2025.2 instalado (mesma versão usada no projeto principal)
 - Placa Basys 3 e cabo micro-USB
 - Osciloscópio de dois canais e duas pontas de prova
 - Projeto principal já simulado (ver o tutorial de simulação do Manchester)
