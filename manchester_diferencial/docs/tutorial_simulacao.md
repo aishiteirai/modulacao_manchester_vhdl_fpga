@@ -8,7 +8,7 @@ Este tutorial mostra como abrir o projeto do codificador Manchester Diferencial 
 
 | Item | Versão |
 |---|---|
-| AMD Vivado (edição gratuita *Standard*) | **a definir pelo grupo** |
+| AMD Vivado (edição gratuita *Standard*) | 2025.2 |
 | Sistema operacional | Windows 10/11 ou Linux |
 | Repositório do grupo | clonado em um caminho **sem espaços e sem acentos** (ex.: `C:\fpga\modulacao_manchester_vhdl_fpga`) |
 
@@ -65,7 +65,9 @@ Note: Simulacao concluida sem erros
 
 Qualquer divergência aparece como `Error:` no console, indicando o bit e se o erro foi na transição do início ou do meio do bit.
 
-**[print: Tcl Console com a mensagem "Simulacao concluida sem erros"]**
+![Tcl Console ao final da simulação](midia/viv_sim_dif_console.png)
+
+*Figura: Tcl Console com a mensagem "Simulacao concluida sem erros" após `restart` e `run 4us`.*
 
 ## 6. Visualização da forma de onda
 
@@ -76,7 +78,13 @@ Qualquer divergência aparece como `Error:` no console, indicando o bit e se o e
 5. Clicar em **Zoom Fit** e depois aproximar o trecho entre 0 e 1 µs;
 6. Salvar a configuração em **File › Simulation Waveform › Save Configuration As**, com o nome `manchester_dif_tb_behav.wcfg`, na pasta `vivado_project/`.
 
-**[print: forma de onda com idx, bit atual, data_out e led lado a lado]**
+![Forma de onda completa](midia/viv_sim_dif_onda.png)
+
+*Figura: forma de onda completa da simulação (Zoom Fit), com as duas voltas, a troca de switches e o reset no meio da transmissão.*
+
+![Zoom nos dois primeiros bits](midia/viv_sim_dif_zoom.png)
+
+*Figura: zoom nos dois primeiros bits após o reset (bit 15 = 1 e bit 14 = 0).*
 
 ## 7. Resultado esperado
 
@@ -93,5 +101,9 @@ O que conferir:
 - **Bits iguais consecutivos:** a sequência `11` (bits 13 e 12) e `00` (bits 11 e 10) evidencia os dois casos da regra;
 - **LEDs:** apenas o LED do bit em transmissão recebe o sinal (`8000` = LD15, `4000` = LD14...);
 - **Reset no meio da transmissão:** entre 3,5 µs e 3,65 µs as saídas ficam em nível baixo, e a transmissão recomeça em SW15 partindo novamente do nível baixo.
+
+![Reset no meio da transmissão](midia/viv_sim_dif_reset.png)
+
+*Figura: fim do reset aplicado no meio da transmissão: ao soltar o botão, a transmissão recomeça em SW15 a partir do nível baixo, já com a nova sequência (`b2f0`).*
 
 O índice muda um ciclo de clock antes das saídas, pois as saídas passam por um flip-flop antes de deixar o circuito.
