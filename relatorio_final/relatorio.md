@@ -29,7 +29,7 @@ Integrantes:
 
 ## Resumo
 
-Este trabalho apresentou a implementação, em VHDL, de dois codificadores de linha: Manchester, na convenção IEEE 802.3, e Manchester Diferencial, com nível baixo após o reset. Os circuitos transmitem ciclicamente uma sequência de 16 bits definida pelos switches da placa Basys 3 e apresentam o sinal codificado nos LEDs, em um display de 7 segmentos (número do bit), no conector PMOD, para observação em osciloscópio, e na saída VGA, que muda a cor da tela conforme o nível do sinal. Os testbenches autoverificáveis não apontaram erros no GHDL nem no Vivado Simulator, e a implementação no Vivado 2025.2 atendeu ao clock de 100 MHz com folga (WNS de 2,520 ns e 3,075 ns), usando menos de 1 % dos recursos da FPGA. Medidas feitas sobre as formas de onda simuladas confirmaram a autossincronização, a ausência de componente DC e o dobro de largura de banda dos códigos Manchester em relação ao NRZ, bem como a imunidade do Manchester Diferencial à inversão de polaridade. **[pendente: acrescentar uma frase sobre os resultados na placa, no osciloscópio e no VGA.]**
+Este trabalho apresentou a implementação, em VHDL, de dois codificadores de linha: Manchester, na convenção IEEE 802.3, e Manchester Diferencial, com nível baixo após o reset. Os circuitos transmitem ciclicamente uma sequência de 16 bits definida pelos switches da placa Basys 3 e apresentam o sinal codificado nos LEDs, em um display de 7 segmentos (número do bit), no conector PMOD, para observação em osciloscópio, e na saída VGA, que muda a cor da tela conforme o nível do sinal. Os testbenches autoverificáveis não apontaram erros no GHDL nem no Vivado Simulator, e a implementação no Vivado 2025.2 atendeu ao clock de 100 MHz com folga (WNS de 2,520 ns e 3,075 ns), usando menos de 1 % dos recursos da FPGA. Medidas feitas sobre as formas de onda simuladas confirmaram a autossincronização, a ausência de componente DC e o dobro de largura de banda dos códigos Manchester em relação ao NRZ, bem como a imunidade do Manchester Diferencial à inversão de polaridade. Na placa, os dois codificadores funcionaram conforme o esperado em todos os testes. **[pendente: acrescentar os resultados do osciloscópio e do VGA.]**
 
 ---
 
@@ -173,7 +173,7 @@ Antes do uso do Vivado, os códigos foram compilados e simulados com o simulador
 - **Caminhos no Tcl Console do Vivado:** na primeira execução dos scripts de criação dos projetos, o caminho da pasta foi digitado com barras invertidas (`C:\...`). No Tcl, a barra invertida é um caractere de escape, e o comando `cd` falhou. O problema foi resolvido usando barras normais (`C:/...`), o que passou a constar nos tutoriais;
 - **Sinais adicionados após a simulação:** sinais internos arrastados para a janela de forma de onda depois da execução apareceram vazios, pois o Vivado Simulator só registra os sinais presentes na janela durante a simulação. Foi necessário reiniciar e executar de novo a simulação (`restart` e `run 4us`);
 - **Perda de alterações em um *merge*:** ao resolver um conflito na integração das *branches*, os arquivos do projeto Manchester voltaram à versão anterior ao display de 7 segmentos, o que impedia a compilação do top VGA. O problema foi detectado pela regressão automática dos testbenches e da síntese e corrigido restaurando os arquivos;
-- **[pendente]** dificuldades encontradas na placa.
+- **Placa não detectada pelo Vivado:** na primeira tentativa de gravação, o Hardware Manager conectou-se ao servidor local, mas não encontrou a placa (*There is no current hw_target*). **[pendente: registrar a causa e a solução adotada (cabo, porta USB ou driver).]**
 
 ---
 
@@ -226,11 +226,29 @@ No Vivado 2025.2, os seis projetos foram sintetizados e implementados e tiveram 
 
 O WNS (*Worst Negative Slack*) positivo indica que todos os caminhos do circuito atendem ao período de 10 ns do clock, com folga. Os dois circuitos ocupam menos de 1 % dos recursos da FPGA (20 800 LUTs e 41 600 flip-flops). O Manchester Diferencial usa 5 LUTs a mais, correspondentes à lógica da regra de transição, e o número de flip-flops é o mesmo nos dois projetos. A maior parte dos flip-flops corresponde ao contador de ciclos de 27 bits, aos 16 LEDs registrados e ao contador de multiplexação de 17 bits do display. **[pendente: analisar os avisos da aba *Methodology* do Vivado (46 avisos no projeto diferencial).]**
 
-### 5.3 Placa, osciloscópio e VGA
+### 5.3 Placa
+
+Os dois projetos foram gravados na Basys 3 e testados em 13/11/2026, seguindo as sequências dos tutoriais da placa. Os testes foram filmados, e os vídeos estão nas pastas `docs/midia/` de cada projeto.
+
+| Projeto | Testes realizados | Resultado |
+|---|---|---|
+| Manchester | todos os switches em 0, todos em 1, sequência `1011001011110000`, reset e troca de switch durante a transmissão | conforme o esperado |
+| Manchester Diferencial | todos em 0, todos em 1, sequência `1100110011001100` e reset | conforme o esperado |
+
+Nos dois projetos, o display de 7 segmentos mostrou o número do bit em transmissão, decrescendo de 15 a 0 e recomeçando, e o LED aceso acompanhou a posição do switch transmitido. No Manchester, o LED ativo ficou aceso na primeira metade dos bits 0 e na segunda metade dos bits 1. No Manchester Diferencial, o LED mudou de estado no meio de todos os bits; com todos os switches em 0, cada LED começou aceso, e com todos em 1 o estado inicial alternou entre posições consecutivas. Ao pressionar o BTNC, LEDs e display apagaram, e ao soltá-lo a transmissão recomeçou em SW15 (no Diferencial, a partir do nível baixo).
+
+![Placa com o Manchester](../manchester/docs/midia/foto_placa_funcionando.jpg)
+
+*Figura 7: Basys 3 com o codificador Manchester durante a transmissão do bit 14 (LD14 aceso).*
+
+![Placa com o Manchester Diferencial](../manchester_diferencial/docs/midia/foto_placa_funcionando.jpg)
+
+*Figura 8: Basys 3 com o codificador Manchester Diferencial durante a transmissão do bit 13 (quadro do vídeo do teste com a sequência `1100110011001100`).*
+
+### 5.4 Osciloscópio e VGA
 
 **[pendente]**
 
-- Fotos da placa em funcionamento, com os testes do tutorial da placa;
 - Capturas do osciloscópio (saída PMOD), com os sinais e as transições do meio do bit identificados;
 - Fotos ou vídeo da tela VGA.
 
@@ -283,7 +301,9 @@ O Manchester foi mais simples de implementar e de interpretar na placa, pois cad
 
 ### 6.5 Simulação e placa
 
-**[pendente]** Comparar o comportamento observado na placa, no osciloscópio e no monitor com as Figuras 1 a 4 (ordem dos LEDs, metades do bit, reset, troca de switches) e comentar eventuais diferenças, como a latência de 3 ciclos de clock após o reset, imperceptível na placa.
+O comportamento observado na placa coincidiu com o das simulações (Figuras 1, 2, 5 e 6): a ordem de transmissão de SW15 a SW0, o LED ativo e as metades do bit em cada código, a leitura do switch apenas no início do bit e o reset com recomeço em SW15. A diferença entre os dois ambientes está na escala de tempo: na simulação, cada bit durou 100 ns (`CYCLES_PER_BIT = 10`), enquanto na placa durou 1 s (`CYCLES_PER_BIT = 100_000_000`), sem nenhuma alteração no código do circuito. A latência de 3 ciclos de clock entre soltar o botão e o primeiro bit, visível na simulação, corresponde a 30 ns na placa e é imperceptível.
+
+**[pendente]** Comparar as capturas do osciloscópio com as Figuras 3 e 4 e o comportamento da tela VGA com a sequência esperada.
 
 ---
 
@@ -295,7 +315,7 @@ Do ponto de vista metodológico, o uso de testbenches autoverificáveis, da pré
 
 Como limitações, a duração do bit é fixada em tempo de síntese, sendo necessário gerar um *bitstream* diferente para os LEDs (1 s por bit) e para o osciloscópio (1 ms por bit), e o trabalho não inclui um decodificador. Como trabalhos futuros, sugerem-se a seleção da taxa de bits por switches ou botões, a implementação dos decodificadores com recuperação de relógio a partir das transições do sinal e a transmissão entre duas placas pelo conector PMOD.
 
-**[pendente]** Acrescentar as conclusões sobre o funcionamento na placa, no osciloscópio e no VGA.
+Os testes na placa confirmaram o comportamento previsto pela simulação nos dois codificadores, com a mesma descrição de hardware operando com 100 ns por bit na simulação e 1 s por bit na Basys 3. **[pendente: acrescentar as conclusões sobre o osciloscópio e o VGA.]**
 
 ---
 
