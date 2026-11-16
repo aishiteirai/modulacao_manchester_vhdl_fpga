@@ -13,7 +13,9 @@ Este tutorial mostra como sintetizar o codificador Manchester Diferencial, gerar
 | Cabo micro-USB | ligado ao conector **PROG/UART** da placa |
 | Projeto Vivado | aberto conforme o [tutorial de simulação](./tutorial_simulacao.md) (`vivado_project/manchester_dif.xpr` ou `create_project.tcl`) |
 
-**[foto: placa Basys 3 com o jumper JP1 em JTAG e o cabo USB ligado]**
+![Placa conectada](midia/foto_placa_conexao.jpg)
+
+*Figura: placa Basys 3 com o cabo micro-USB no conector PROG/UART e o jumper JP1 em JTAG.*
 
 ## 2. Síntese
 
@@ -81,7 +83,9 @@ Cada bit dura **1 s**: 0,5 s na primeira metade e 0,5 s na segunda. O LED ativo 
 
 **Como conferir:** o LED ativo **sempre muda de estado no meio do bit**. Na passagem para a posição seguinte, o novo LED começa no **mesmo estado** em que o LED anterior terminou se o bit for **1**, e no **estado oposto** se o bit for **0**. Logo após o reset, o primeiro LED parte do nível baixo: se SW15 = 1, LD15 começa apagado; se SW15 = 0, começa aceso.
 
-**[foto: placa em funcionamento com o display e um LED aceso]**
+![Placa em funcionamento](midia/foto_placa_funcionando.jpg)
+
+*Figura: placa gravada com o codificador Manchester Diferencial (quadro do vídeo da sequência `1100110011001100`): o display mostra o bit em transmissão (13) e o LD13 está aceso.*
 
 ## 8. Como testar
 
@@ -94,7 +98,16 @@ Cada bit dura **1 s**: 0,5 s na primeira metade e 0,5 s na segunda. O LED ativo 
 | Reset | qualquer | Segurar o BTNC: LEDs e display apagam. Soltar: recomeça em LD15, com o display mostrando 15 |
 | Troca de switch | qualquer | Mudar um switch enquanto o seu LED está ativo: o bit atual não muda; a mudança aparece na próxima volta |
 
-**[vídeo: cerca de 20 s de cada teste, para o vídeo de demonstração]**
+Os testes acima foram gravados na placa em 13/11/2026. Os vídeos ficam em `docs/midia/`:
+
+| Teste | Vídeo |
+|---|---|
+| Todos em 0 | [video_dif_todos0.mp4](midia/video_dif_todos0.mp4) |
+| Todos em 1 | [video_dif_todos1.mp4](midia/video_dif_todos1.mp4) |
+| Pares iguais (`1100110011001100`) | [video_dif_pares.mp4](midia/video_dif_pares.mp4) |
+| Reset (BTNC) | [video_dif_reset.mp4](midia/video_dif_reset.mp4) |
+
+Em todos os testes, o comportamento observado foi o descrito na tabela: o LED ativo muda de estado no meio de todos os bits; com todos os switches em 0, cada LED entra aceso, e com todos em 1 o estado inicial alterna de uma posição para a outra; após o reset, a transmissão recomeça em SW15 a partir do nível baixo.
 
 ## 9. Problemas comuns
 
