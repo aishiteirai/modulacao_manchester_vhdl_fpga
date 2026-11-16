@@ -13,7 +13,9 @@ Este tutorial mostra como sintetizar o codificador Manchester, gerar o bitstream
 | Cabo micro-USB | ligado ao conector **PROG/UART** da placa |
 | Projeto Vivado | aberto conforme o [tutorial de simulação](./tutorial_simulacao.md) (`vivado_project/manchester.xpr` ou `create_project.tcl`) |
 
-**[foto: placa Basys 3 com o jumper JP1 em JTAG e o cabo USB ligado]**
+![Placa conectada](midia/foto_placa_conexao.jpg)
+
+*Figura: placa Basys 3 com o cabo micro-USB no conector PROG/UART e o jumper JP1 em JTAG.*
 
 ## 2. Síntese
 
@@ -85,7 +87,9 @@ Cada bit dura **1 s**: 0,5 s na primeira metade e 0,5 s na segunda. O LED ativo 
 
 **Como conferir (convenção IEEE 802.3):** com o switch abaixo do LED ativo em **1**, o LED fica **apagado e depois aceso**; com o switch em **0**, fica **aceso e depois apagado**.
 
-**[foto: placa em funcionamento com o display e um LED aceso]**
+![Placa em funcionamento](midia/foto_placa_funcionando.jpg)
+
+*Figura: placa gravada com o codificador Manchester: o display mostra o bit em transmissão (14) e o LD14, acima do SW14, está aceso.*
 
 ## 8. Como testar
 
@@ -98,7 +102,17 @@ Cada bit dura **1 s**: 0,5 s na primeira metade e 0,5 s na segunda. O LED ativo 
 | Reset | qualquer | Segurar o BTNC: LEDs e display apagam. Soltar: recomeça em LD15, com o display mostrando 15 |
 | Troca de switch | qualquer | Mudar um switch enquanto o seu LED está ativo: o bit atual não muda; a mudança aparece na próxima volta |
 
-**[vídeo: cerca de 20 s de cada teste, para o vídeo de demonstração]**
+Os testes acima foram gravados na placa em 13/11/2026. Os vídeos ficam em `docs/midia/`:
+
+| Teste | Vídeo |
+|---|---|
+| Todos em 0 | [video_manchester_todos0.mp4](midia/video_manchester_todos0.mp4) |
+| Todos em 1 | [video_manchester_todos1.mp4](midia/video_manchester_todos1.mp4) |
+| Exemplo do enunciado | [video_manchester_sequencia.mp4](midia/video_manchester_sequencia.mp4) |
+| Reset (BTNC) | [video_manchester_reset.mp4](midia/video_manchester_reset.mp4) |
+| Troca de switch | [video_manchester_troca.mp4](midia/video_manchester_troca.mp4) |
+
+Em todos os testes, o comportamento observado foi o descrito na tabela: o display acompanha o bit em transmissão de 15 a 0, o LED ativo fica aceso na primeira metade dos bits 0 e na segunda metade dos bits 1, e o BTNC apaga LEDs e display e faz a transmissão recomeçar em SW15.
 
 ## 9. Problemas comuns
 
