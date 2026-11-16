@@ -15,7 +15,7 @@ Comunicação de Dados – Sistemas Reconfiguráveis
 | Professor | Vinícius Borges |
 | Instituição | Faculdade Engenheiro Salvador Arena (FESA) |
 | Semestre | 7º semestre, 2026 |
-| Grupo | **[pendente]** |
+| Grupo | 6 |
 
 Integrantes:
 
