@@ -1,7 +1,7 @@
 # Codificação Manchester em VHDL
 
 Trabalho da disciplina de **Comunicação de Dados – Sistemas Reconfiguráveis**, ministrada pelo professor Vinícius Borges, na Faculdade Engenheiro Salvador Arena (FESA).
-7º semestre, 2026 · Grupo **[número a confirmar]**.
+7º semestre, 2026 · Grupo 6.
 
 ## Integrantes
 
