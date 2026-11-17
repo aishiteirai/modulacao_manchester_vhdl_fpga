@@ -29,7 +29,7 @@ Integrantes:
 
 ## Resumo
 
-Este trabalho apresentou a implementação, em VHDL, de dois codificadores de linha: Manchester, na convenção IEEE 802.3, e Manchester Diferencial, com nível baixo após o reset. Os circuitos transmitem ciclicamente uma sequência de 16 bits definida pelos switches da placa Basys 3 e apresentam o sinal codificado nos LEDs, em um display de 7 segmentos (número do bit), no conector PMOD, para observação em osciloscópio, e na saída VGA, que muda a cor da tela conforme o nível do sinal. Os testbenches autoverificáveis não apontaram erros no GHDL nem no Vivado Simulator, e a implementação no Vivado 2025.2 atendeu ao clock de 100 MHz com folga (WNS de 2,520 ns e 3,075 ns), usando menos de 1 % dos recursos da FPGA. Medidas feitas sobre as formas de onda simuladas confirmaram a autossincronização, a ausência de componente DC e o dobro de largura de banda dos códigos Manchester em relação ao NRZ, bem como a imunidade do Manchester Diferencial à inversão de polaridade. Na placa, os dois codificadores funcionaram conforme o esperado em todos os testes. **[pendente: acrescentar os resultados do osciloscópio e do VGA.]**
+Este trabalho apresentou a implementação, em VHDL, de dois codificadores de linha: Manchester, na convenção IEEE 802.3, e Manchester Diferencial, com nível baixo após o reset. Os circuitos transmitem ciclicamente uma sequência de 16 bits definida pelos switches da placa Basys 3 e apresentam o sinal codificado nos LEDs, em um display de 7 segmentos (número do bit), no conector PMOD, para observação em osciloscópio, e na saída VGA, que muda a cor da tela conforme o nível do sinal. Os testbenches autoverificáveis não apontaram erros no GHDL nem no Vivado Simulator, e a implementação no Vivado 2025.2 atendeu ao clock de 100 MHz com folga (WNS de 2,520 ns e 3,075 ns), usando menos de 1 % dos recursos da FPGA. Medidas feitas sobre as formas de onda simuladas confirmaram a autossincronização, a ausência de componente DC e o dobro de largura de banda dos códigos Manchester em relação ao NRZ, bem como a imunidade do Manchester Diferencial à inversão de polaridade. Na placa, os dois codificadores funcionaram conforme o esperado em todos os testes. No osciloscópio, as frequências medidas (1 kHz e 500 Hz) e a decodificação das capturas confirmaram as formas de onda previstas. **[pendente: acrescentar os resultados do VGA.]**
 
 ---
 
@@ -121,7 +121,7 @@ O trabalho foi organizado nas seguintes etapas:
 
 O desenvolvimento foi dividido entre os integrantes e acompanhado por *issues* no repositório Git do grupo.
 
-**Ferramentas utilizadas:** AMD Vivado 2025.2, Vivado Simulator, GHDL, placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`), osciloscópio **[pendente: modelo]**, monitor VGA e Git/GitHub.
+**Ferramentas utilizadas:** AMD Vivado 2025.2, Vivado Simulator, GHDL, placa Digilent Basys 3 (FPGA Artix-7 `xc7a35tcpg236-1`), osciloscópio USB Digilent Analog Discovery 3 com o programa WaveForms 3.24, monitor VGA e Git/GitHub.
 
 ---
 
@@ -245,12 +245,34 @@ Nos dois projetos, o display de 7 segmentos mostrou o número do bit em transmis
 
 *Figura 8: Basys 3 com o codificador Manchester Diferencial durante a transmissão do bit 13 (quadro do vídeo do teste com a sequência `1100110011001100`).*
 
-### 5.4 Osciloscópio e VGA
+### 5.4 Osciloscópio
 
-**[pendente]**
+As saídas PMOD dos dois projetos foram observadas em 16/11/2026 com o Analog Discovery 3, usando o canal 1 ligado ao pino JA1 (sinal codificado) e ao GND da placa, com 1 ms por bit. A tabela resume as frequências medidas pelo WaveForms:
 
-- Capturas do osciloscópio (saída PMOD), com os sinais e as transições do meio do bit identificados;
-- Fotos ou vídeo da tela VGA.
+| Switches | Manchester | Manchester Diferencial |
+|---|:---:|:---:|
+| todos em 1 | 1,0000 kHz | 500,01 Hz |
+| todos em 0 | 1,0000 kHz | 1,0000 kHz |
+
+Com a sequência do enunciado, `1011001011110000`, as larguras dos pulsos (0,5 ms e 1 ms) foram medidas nas capturas e convertidas em bits: lida como Manchester, a captura do primeiro projeto resulta em um trecho da sequência configurada, e lida como Manchester Diferencial, a captura do segundo projeto resulta exatamente em `1011001011110000`. A captura do Diferencial com `1100110011001100` resultou, da mesma forma, na sequência configurada.
+
+![Osciloscópio: Manchester](../manchester/saidas/pmod_osciloscopio/docs/midia/osc_sequencia.png)
+
+*Figura 9: Saída PMOD do Manchester com a sequência `1011001011110000` (Analog Discovery 3, 2 ms/div).*
+
+![Osciloscópio: Manchester Diferencial](../manchester_diferencial/saidas/pmod_osciloscopio/docs/midia/osc_sequencia.png)
+
+*Figura 10: Saída PMOD do Manchester Diferencial com a mesma sequência.*
+
+![Osciloscópio: Diferencial com todos em 1](../manchester_diferencial/saidas/pmod_osciloscopio/docs/midia/osc_todos1_freq.png)
+
+*Figura 11: Manchester Diferencial com todos os switches em 1: 500 Hz, metade da frequência do Manchester com os mesmos switches.*
+
+Nas bordas do sinal observadas em escala de nanossegundos, foram vistos tempo de subida da ordem de 10 ns e uma pequena oscilação (*ringing*) logo após a transição, atribuídos à indutância dos fios de ligação e do terra; esse efeito não altera a leitura dos bits.
+
+### 5.5 VGA
+
+**[pendente]** Fotos ou vídeo da tela VGA. Na primeira tentativa, o monitor não exibiu imagem; a causa ainda está sendo verificada.
 
 ---
 
@@ -273,7 +295,7 @@ O tempo em nível alto foi de 50 % nos três sinais, mas por razões diferentes:
 
 ### 6.2 Largura de banda
 
-Com 1 kbit/s, o sinal NRZ de maior frequência é a sequência alternada `1010...`, uma onda quadrada de 500 Hz. Nos códigos Manchester, sequências de bits iguais (todos 1 ou todos 0 no Manchester; todos 0 no Diferencial) produzem uma onda quadrada de 1 kHz, com pulsos de 0,5 ms. A frequência fundamental máxima dobrou em relação ao NRZ, confirmando que os códigos Manchester exigem aproximadamente o dobro da largura de banda para a mesma taxa de bits.
+Com 1 kbit/s, o sinal NRZ de maior frequência é a sequência alternada `1010...`, uma onda quadrada de 500 Hz. Nos códigos Manchester, sequências de bits iguais (todos 1 ou todos 0 no Manchester; todos 0 no Diferencial) produzem uma onda quadrada de 1 kHz, com pulsos de 0,5 ms. A frequência fundamental máxima dobrou em relação ao NRZ, confirmando que os códigos Manchester exigem aproximadamente o dobro da largura de banda para a mesma taxa de bits. As medidas no osciloscópio confirmaram esses valores: 1,0000 kHz no Manchester com todos os bits iguais e no Diferencial com todos os bits em 0, e 500 Hz no Diferencial com todos os bits em 1.
 
 ### 6.3 Inversão de polaridade
 
@@ -303,7 +325,9 @@ O Manchester foi mais simples de implementar e de interpretar na placa, pois cad
 
 O comportamento observado na placa coincidiu com o das simulações (Figuras 1, 2, 5 e 6): a ordem de transmissão de SW15 a SW0, o LED ativo e as metades do bit em cada código, a leitura do switch apenas no início do bit e o reset com recomeço em SW15. A diferença entre os dois ambientes está na escala de tempo: na simulação, cada bit durou 100 ns (`CYCLES_PER_BIT = 10`), enquanto na placa durou 1 s (`CYCLES_PER_BIT = 100_000_000`), sem nenhuma alteração no código do circuito. A latência de 3 ciclos de clock entre soltar o botão e o primeiro bit, visível na simulação, corresponde a 30 ns na placa e é imperceptível.
 
-**[pendente]** Comparar as capturas do osciloscópio com as Figuras 3 e 4 e o comportamento da tela VGA com a sequência esperada.
+As capturas do osciloscópio (Figuras 9 e 10) apresentaram as mesmas larguras de pulso das formas de onda simuladas para os tops PMOD (Figuras 3 e 4), e as frequências medidas coincidiram com as previstas: 1 kHz para bits iguais no Manchester e, no Diferencial, 500 Hz com todos os bits em 1 e 1 kHz com todos em 0. A diferença entre os dois códigos para a mesma entrada, prevista na fundamentação teórica, foi assim confirmada experimentalmente.
+
+**[pendente]** Comparar o comportamento da tela VGA com a sequência esperada.
 
 ---
 
@@ -315,7 +339,7 @@ Do ponto de vista metodológico, o uso de testbenches autoverificáveis, da pré
 
 Como limitações, a duração do bit é fixada em tempo de síntese, sendo necessário gerar um *bitstream* diferente para os LEDs (1 s por bit) e para o osciloscópio (1 ms por bit), e o trabalho não inclui um decodificador. Como trabalhos futuros, sugerem-se a seleção da taxa de bits por switches ou botões, a implementação dos decodificadores com recuperação de relógio a partir das transições do sinal e a transmissão entre duas placas pelo conector PMOD.
 
-Os testes na placa confirmaram o comportamento previsto pela simulação nos dois codificadores, com a mesma descrição de hardware operando com 100 ns por bit na simulação e 1 s por bit na Basys 3. **[pendente: acrescentar as conclusões sobre o osciloscópio e o VGA.]**
+Os testes na placa confirmaram o comportamento previsto pela simulação nos dois codificadores, com a mesma descrição de hardware operando com 100 ns por bit na simulação e 1 s por bit na Basys 3. As medidas no osciloscópio confirmaram experimentalmente a diferença entre os dois códigos para a mesma entrada, como a frequência de 500 Hz do Manchester Diferencial contra 1 kHz do Manchester com todos os bits em 1. **[pendente: acrescentar as conclusões sobre o VGA.]**
 
 ---
 
