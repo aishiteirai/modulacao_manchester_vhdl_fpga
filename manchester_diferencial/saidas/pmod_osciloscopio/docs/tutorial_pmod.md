@@ -8,7 +8,7 @@ Este tutorial mostra como gravar a saída PMOD do codificador Manchester Diferen
 
 - Vivado 2025.2 instalado (mesma versão usada no projeto principal)
 - Placa Basys 3 e cabo micro-USB
-- Osciloscópio de dois canais e duas pontas de prova
+- Osciloscópio de dois canais e duas pontas de prova, ou o Analog Discovery 3 com o programa WaveForms (seção 7)
 - Projeto principal já simulado (ver o tutorial de simulação do Manchester Diferencial)
 
 ## 2. Criação do projeto Vivado
@@ -75,6 +75,59 @@ Forma de onda esperada para `1011001011110000`:
 
 Em cada captura, identificar os canais e a escala de tempo e marcar: as transições do meio do bit (presentes em todos os bits), as inversões no início dos bits 0 e a ausência de transição no início dos bits 1. Uma captura logo após soltar o BTNC mostra o nível baixo após o reset. Salvar a imagem pelo próprio osciloscópio (pendrive) ou fotografar a tela.
 
-**[foto/print: captura do osciloscópio com a sequência 1011001011110000]**
+## 7. Configuração usada no laboratório (Analog Discovery 3)
 
-**[foto/print: captura com todos os bits em 1, todos em 0 e 1100110011001100]**
+Nos testes de 16/11/2026, o sinal foi observado com o **Analog Discovery 3**, um osciloscópio USB da Digilent controlado pelo programa **WaveForms**, usando apenas o canal 1, ligado ao sinal codificado:
+
+| Fio do Analog Discovery 3 | Ligação na placa |
+|---|---|
+| **1+** (laranja) | pino 1 do JA (sinal codificado) |
+| **1−** (laranja e branco) e **⏚** (preto) | GND do JA |
+
+| Ajuste no WaveForms (Scope) | Valor |
+|---|---|
+| Channel 1 | Range 1 V/div, Offset −1,5 V |
+| Time | Base 2 ms/div (volta completa) ou 200 µs/div (detalhe), Position 0 |
+| Trigger | Mode Normal, Source Channel 1, Condition Rising, Level 1,6 V |
+| Medida | Measurements › Add › Channel 1 › Frequency |
+
+Com um único canal, não há a referência do dado original para marcar o início de cada bit; as capturas foram conferidas pela frequência medida e pela largura dos pulsos (0,5 ms ou 1 ms). Para registrar o reset, usar Mode **Shift** com Base 200 ms/div e Trigger **Auto**: a tela continua rolando e mostra a linha em 0 V enquanto o BTNC é pressionado.
+
+## 8. Resultados obtidos
+
+![Sequência do enunciado](midia/osc_sequencia.png)
+
+*Figura: sequência `1011001011110000` (2 ms/div). Lida como Manchester Diferencial, a forma de onda resulta exatamente na sequência configurada nos switches.*
+
+![Detalhe de dois bits](midia/osc_zoom_bit.png)
+
+*Figura: detalhe (200 µs/div).*
+
+![Todos os switches em 1](midia/osc_todos1.png)
+
+*Figura: todos os switches em 1 (2 ms/div): só há transição no meio dos bits, e a onda tem pulsos de 1 ms.*
+
+![Frequência com todos em 1](midia/osc_todos1_freq.png)
+
+*Figura: frequência medida com todos os switches em 1: 500 Hz.*
+
+![Todos os switches em 0](midia/osc_todos0.png)
+
+*Figura: todos os switches em 0 (2 ms/div): transições no início e no meio de cada bit, pulsos de 0,5 ms.*
+
+![Frequência com todos em 0](midia/osc_todos0_freq.png)
+
+*Figura: frequência medida com todos os switches em 0: 1,0000 kHz.*
+
+![Pares de bits iguais](midia/osc_pares.png)
+
+*Figura: sequência `1100110011001100`: trechos de pulsos de 1 ms (bits 1) alternados com trechos de pulsos de 0,5 ms (bits 0).*
+
+| Switches | Esperado | Medido |
+|---|---|---|
+| todos em 1 | onda regular de 500 Hz | 500,01 Hz ✅ |
+| todos em 0 | onda regular de 1 kHz | 1,0000 kHz ✅ |
+| `1100110011001100` | trechos de 500 Hz e de 1 kHz alternados | conforme o esperado ✅ |
+| `1011001011110000` | decodificação igual à sequência dos switches | conforme o esperado ✅ |
+
+Com os mesmos switches em 1, o Manchester produz 1 kHz e o Manchester Diferencial, 500 Hz: no Diferencial, o bit 1 mantém o nível no início do intervalo, e só resta a transição do meio do bit.
