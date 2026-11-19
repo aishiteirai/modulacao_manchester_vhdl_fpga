@@ -12,7 +12,7 @@ manchester_diferencial/
 ├── vivado_project/      Projeto Vivado e script para recriá-lo
 ├── docs/                Tutoriais e documentação técnica
 │   └── midia/           Prints, fotos e vídeos
-└── saidas/              Saídas PMOD (osciloscópio) e VGA
+└── saidas/              Saídas PMOD (osciloscópio), VGA e todas ao mesmo tempo
 ```
 
 ## Arquivos de código
@@ -61,6 +61,7 @@ Cada bit dura 1 s. O LED ativo **sempre muda de estado no meio do bit**. Na pass
 
 - [Saída pelo PMOD para osciloscópio](./saidas/pmod_osciloscopio/)
 - [Saída VGA com cores pulsantes](./saidas/vga/)
+- [Todas as saídas ao mesmo tempo](./saidas/completo/): placa, VGA e osciloscópio com o mesmo sinal, em um único bitstream
 
 ## Próximo passo
 
