@@ -37,12 +37,17 @@ entity manchester is  -- manchester_dif no projeto diferencial
     nrz_out  : out std_logic;                      -- bit atual / dado original
     led      : out std_logic_vector(15 downto 0);  -- LD15..LD0
     seg      : out std_logic_vector(6 downto 0);   -- display de 7 segmentos (g..a)
-    an       : out std_logic_vector(3 downto 0)    -- anodos do display (AN3..AN0)
+    an       : out std_logic_vector(3 downto 0);   -- anodos do display (AN3..AN0)
+    vgaRed   : out std_logic_vector(3 downto 0);   -- VGA: tela verde (nível alto)
+    vgaGreen : out std_logic_vector(3 downto 0);   --      ou azul (nível baixo)
+    vgaBlue  : out std_logic_vector(3 downto 0);
+    Hsync    : out std_logic;
+    Vsync    : out std_logic
   );
 end entity;
 ```
 
-As portas `seg` e `an` foram acrescentadas pela issue #6 (display de 7 segmentos). Tops que instanciam o núcleo, como os do PMOD e do VGA, podem deixá-las sem conexão, mas precisam incluir `display_7seg.vhd` entre os arquivos do projeto.
+As portas `seg` e `an` foram acrescentadas pela issue #6 (display de 7 segmentos), e as portas do VGA, para que o projeto principal mostre a placa, o osciloscópio e o monitor ao mesmo tempo. Tops que instanciam o núcleo, como os do PMOD e do VGA, podem deixá-las sem conexão, mas precisam incluir `display_7seg.vhd` entre os arquivos do projeto.
 
 Toda porta do top precisa ter pino no `.xdc`; caso contrário, o *Generate Bitstream* falha.
 

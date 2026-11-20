@@ -8,8 +8,10 @@
 --
 -- O sinal codificado sai em data_out e no LED acima do switch em transmissão;
 -- os demais LEDs ficam apagados. O display de 7 segmentos mostra o número do
--- bit em transmissão (15 a 0). Enquanto btn_rst está pressionado, a
--- transmissão fica parada e a saída em nível baixo; ao soltar, recomeça em SW15.
+-- bit em transmissão (15 a 0), e o conector VGA mostra a tela inteira verde
+-- (sinal em nível alto) ou azul (nível baixo). Enquanto btn_rst está
+-- pressionado, a transmissão fica parada e a saída em nível baixo; ao soltar,
+-- recomeça em SW15.
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -26,7 +28,12 @@ entity manchester is
     nrz_out  : out std_logic;                      -- bit em transmissão (dado original)
     led      : out std_logic_vector(15 downto 0);  -- LD15..LD0
     seg      : out std_logic_vector(6 downto 0);   -- segmentos do display (g..a)
-    an       : out std_logic_vector(3 downto 0)    -- anodos do display (AN3..AN0)
+    an       : out std_logic_vector(3 downto 0);   -- anodos do display (AN3..AN0)
+    vgaRed   : out std_logic_vector(3 downto 0);   -- conector VGA: tela inteira
+    vgaGreen : out std_logic_vector(3 downto 0);   --   verde com o sinal em nível alto
+    vgaBlue  : out std_logic_vector(3 downto 0);   --   e azul em nível baixo
+    Hsync    : out std_logic;
+    Vsync    : out std_logic
   );
 end entity;
 
@@ -48,6 +55,27 @@ architecture rtl of manchester is
   signal enc_reg : std_logic := '0';
   signal nrz_reg : std_logic := '0';
   signal led_reg : std_logic_vector(15 downto 0) := (others => '0');
+
+  -- Saída VGA 640x480 @ 60 Hz (mesma temporização do controlador da pasta
+  -- saidas/vga): 640 + 16 + 96 + 48 = 800 pixels por linha e
+  -- 480 + 10 + 2 + 33 = 525 linhas por quadro, sincronismos ativos em 0
+  constant H_VISIBLE : natural := 640;
+  constant H_SYNC_I  : natural := 656;  -- início do pulso de Hsync
+  constant H_SYNC_F  : natural := 752;  -- fim do pulso de Hsync
+  constant H_TOTAL   : natural := 800;
+  constant V_VISIBLE : natural := 480;
+  constant V_SYNC_I  : natural := 490;
+  constant V_SYNC_F  : natural := 492;
+  constant V_TOTAL   : natural := 525;
+  constant COR_ALTA  : std_logic_vector(11 downto 0) := x"0F0";  -- verde
+  constant COR_BAIXA : std_logic_vector(11 downto 0) := x"00F";  -- azul
+
+  signal pix_div : natural range 0 to 3 := 0;  -- clock de pixel: 100 MHz / 4
+  signal h_cnt   : natural range 0 to H_TOTAL - 1 := 0;
+  signal v_cnt   : natural range 0 to V_TOTAL - 1 := 0;
+  signal rgb_reg : std_logic_vector(11 downto 0) := (others => '0');
+  signal hs_reg  : std_logic := '1';
+  signal vs_reg  : std_logic := '1';
 begin
   assert CYCLES_PER_BIT mod 2 = 0
     report "CYCLES_PER_BIT deve ser par" severity failure;
@@ -123,6 +151,57 @@ begin
       seg    => seg,
       an     => an
     );
+
+  -- Saída VGA: a cor da tela acompanha o sinal codificado. O VGA não é
+  -- reiniciado pelo botão, para o monitor não perder o sincronismo.
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if pix_div = 3 then
+        pix_div <= 0;
+        if h_cnt = H_TOTAL - 1 then
+          h_cnt <= 0;
+          if v_cnt = V_TOTAL - 1 then
+            v_cnt <= 0;
+          else
+            v_cnt <= v_cnt + 1;
+          end if;
+        else
+          h_cnt <= h_cnt + 1;
+        end if;
+      else
+        pix_div <= pix_div + 1;
+      end if;
+
+      if h_cnt >= H_SYNC_I and h_cnt < H_SYNC_F then
+        hs_reg <= '0';
+      else
+        hs_reg <= '1';
+      end if;
+
+      if v_cnt >= V_SYNC_I and v_cnt < V_SYNC_F then
+        vs_reg <= '0';
+      else
+        vs_reg <= '1';
+      end if;
+
+      if h_cnt < H_VISIBLE and v_cnt < V_VISIBLE then
+        if enc_reg = '1' then
+          rgb_reg <= COR_ALTA;
+        else
+          rgb_reg <= COR_BAIXA;
+        end if;
+      else
+        rgb_reg <= (others => '0');
+      end if;
+    end if;
+  end process;
+
+  vgaRed   <= rgb_reg(11 downto 8);
+  vgaGreen <= rgb_reg(7 downto 4);
+  vgaBlue  <= rgb_reg(3 downto 0);
+  Hsync    <= hs_reg;
+  Vsync    <= vs_reg;
 
   data_out <= enc_reg;
   nrz_out  <= nrz_reg;
