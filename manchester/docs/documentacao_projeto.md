@@ -33,6 +33,8 @@ O circuito recebe uma sequência de 16 bits pelos switches da placa Basys 3 e a 
 | `led` | saída | `std_logic_vector(15 downto 0)` | LEDs LD15..LD0; só o LED do bit em transmissão recebe o sinal codificado |
 | `seg` | saída | `std_logic_vector(6 downto 0)` | Segmentos g..a do display de 7 segmentos (ativos em 0) |
 | `an` | saída | `std_logic_vector(3 downto 0)` | Anodos AN3..AN0 do display (ativos em 0) |
+| `vgaRed`, `vgaGreen`, `vgaBlue` | saída | `std_logic_vector(3 downto 0)` | Cores do conector VGA: tela inteira verde com o sinal em nível alto e azul em nível baixo |
+| `Hsync`, `Vsync` | saída | `std_logic` | Sincronismos horizontal e vertical do VGA (640x480 a 60 Hz) |
 
 ## 4. Parâmetros (generics)
 
@@ -79,6 +81,8 @@ A tabela-verdade corresponde à porta **XNOR**: `saída = bit XNOR metade`.
 
 **Variações para as saídas PMOD e VGA.** O mesmo módulo é instanciado, sem alterações, pelos tops das pastas `saidas/`: na saída PMOD, com `CYCLES_PER_BIT = 100_000` (1 ms por bit) e as saídas `data_out` e `nrz_out` ligadas aos pinos JA1 e JA2; na saída VGA, com 1 s por bit e `data_out` ligado ao controlador VGA, que pinta a tela de verde (nível alto) ou azul (nível baixo).
 
+**Saída VGA no núcleo.** Para permitir mostrar a placa, o osciloscópio e o monitor ao mesmo tempo, o núcleo também gera a saída VGA 640x480 a 60 Hz, com a mesma temporização do controlador da pasta `saidas/vga`: um contador divide o clock por 4 (clock de pixel de 25 MHz), dois contadores percorrem 800 pixels por linha e 525 linhas por quadro, e a área visível recebe verde ou azul conforme o sinal codificado. Essa parte não é reiniciada pelo BTNC, para o monitor não perder o sincronismo. Os tops das saídas PMOD e VGA deixam essas portas sem conexão.
+
 ## 6. Mapeamento físico na placa
 
 | Sinal | Componente | Pino |
@@ -91,6 +95,7 @@ A tabela-verdade corresponde à porta **XNOR**: `saída = bit XNOR metade`.
 | `nrz_out` | PMOD JA2 | L2 |
 | `seg(0..6)` | Segmentos CA..CG | W7, W6, U8, V8, U5, V5, U7 |
 | `an(0..3)` | Anodos AN0..AN3 | U2, U4, V4, W4 |
+| `vgaRed/Green/Blue`, `Hsync`, `Vsync` | Conector VGA | ver a tabela das saídas abaixo |
 
 Os pinos seguem o arquivo `Basys-3-Master.xdc` da Digilent.
 
