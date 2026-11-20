@@ -53,6 +53,7 @@ Para **reproduzir o projeto do zero**, seguir esta ordem:
 | LD15..LD0 | Sinal codificado no LED acima do switch em transmissão |
 | BTNC | Reset: enquanto pressionado, a saída fica apagada; ao soltar, recomeça em SW15 a partir do nível baixo |
 | Display de 7 segmentos | Número do bit em transmissão (15 a 0) |
+| Conector VGA | Tela inteira verde (sinal em nível alto) ou azul (nível baixo), ao mesmo tempo que os LEDs e o PMOD |
 | PMOD JA1 / JA2 | Sinal codificado / dado original |
 
 Cada bit dura 1 s. O LED ativo **sempre muda de estado no meio do bit**. Na passagem para a posição seguinte, o novo LED começa no **mesmo estado** em que o anterior terminou se o bit for **1**, e no **estado oposto** se o bit for **0**.
